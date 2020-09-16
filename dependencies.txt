@@ -1,0 +1,12 @@
+Requires:
+*Note that pip3 is required for python3
+
+pytube3
+pip3 install git+https://github.com/hbmartin/pytube3.git
+
+tqdm
+pip3 install tqdm
+
+
+ffmpeg
+sudo apt install ffmpeg
