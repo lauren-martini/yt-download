@@ -84,7 +84,7 @@ def download_video(link, dest=None, edit_option=True):
         
         if not mp4:
             stream = yt.streams.filter(only_audio=True).first()
-            
+
             check_chars = check_forbidden_char(vid_title)
             title = vid_title
             
@@ -117,8 +117,10 @@ def download_video(link, dest=None, edit_option=True):
                 print("Download complete.")
                 
                 print("Converting to mp3...")
-                os.system("ffmpeg -hide_banner -loglevel error -i \"%s.mp4\" \"%s.mp3\"" % (path, path))
-                os.system("rm \"%s.mp4\"" % path)
+                input_file = "%s.mp4"
+                input_format = "%s.3gpp"
+                os.system("ffmpeg -hide_banner -loglevel error -i \"%s\" \"%s.mp3\"" % (path, path))
+                os.system("rm \"%s\"" % path)
                 print("Done! \n")
                 newly_downloaded.append(vid_title)
                 
@@ -140,7 +142,7 @@ def download_playlist(link, dest=None):
         pl = Playlist(link)
         #pl.populate_video_urls() # gen list of video links
         links = pl.video_urls
-        print("\nDetected playlist: " + str(pl.title()) + "\n")
+        print("\nDetected playlist: " + str(pl.title) + "\n")
         
         print("Would you like the option to edit the title of each video before it is downloaded? y/n")
         print("Note that titles with forbidden characters will automatically have them removed if you select no.")
