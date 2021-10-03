@@ -74,7 +74,7 @@ newly_downloaded = []
         
 def download_video(link, dest=None, edit_option=True):
     try:
-        yt = YouTube(link)
+        yt = YouTube(link, on_progress_callback=progress_function)
         vid_title = yt.title
         print("\nDetected video: ", vid_title)
 
@@ -207,8 +207,16 @@ def end_message():
         print("\n ~~~~~ DONE! Happy watching! :) ~~~~~ \n")
     else:
         print("\n ~~~~~ DONE! Happy listening! :) ~~~~~ \n")
-    
-    
+
+def progress_function(stream, chunk, bytes_remaining):
+    filesize = stream.filesize
+    current = ((filesize - bytes_remaining)/filesize)
+    percent = ('{0:.1f}').format(current*100)
+    progress = int(50*current)
+    status = '█' * progress + '-' * (50 - progress)
+    sys.stdout.write(' ↳ |{bar}| {percent}%\r'.format(bar=status, percent=percent))
+    sys.stdout.flush()
+
 # Run
 if video:
     download_video(link, dest)
