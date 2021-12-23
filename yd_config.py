@@ -11,3 +11,8 @@ forbidden = ["\\", '/', ':', '\"', '*', '|', '<', '>',
 # History file - contains the names of videos that have already been 
 # downloaded. Should be in the same directory as download_youtube.py
 history_path = "/mnt/c/Users/lmart/Projects/youtube_downloader/history.txt"
+
+# Edit option - would you like the downloader to ask if you want to edit
+# the title every time? If false, automatic edits will be applied for
+# forbidden characters.
+edit_option = False
