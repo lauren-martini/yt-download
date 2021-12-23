@@ -96,7 +96,7 @@ def download_video(link, ismp4, dest, edit_option=cfg.edit_option, already_downl
                 print("File size: " + str(stream.filesize/1000) + " kB") 
                 input_file = "%s.mp4"
                 input_format = "%s.3gpp"
-                os.system("ffmpeg -stats -hide_banner -loglevel error -i \"%s\" \"%s.mp3\"" % (path, path))
+                os.system("ffmpeg -stats -hide_banner -loglevel fatal -i \"%s\" \"%s.mp3\"" % (path, path))
                 os.system("rm \"%s\"" % path)
                 print("Done! \n")
                 newly_downloaded.append(vid_title)
@@ -138,7 +138,7 @@ def download_playlist(link, ismp4, dest, already_downloaded=[], newly_downloaded
                 
         edit_all = True if edit_all in ["y", "Y", "yes"] else False
         for vid_link in tqdm(links):
-            download_video(vid_link, dest, edit_all, already_downloaded, newly_downloaded)
+            download_video(vid_link, ismp4, dest, edit_all, already_downloaded, newly_downloaded)
         
         if not ismp4:
             clean_up_extra_mp4s(dest)
@@ -215,7 +215,7 @@ if __name__ == "__main__":
     newly_downloaded = []
 
     if video:
-        download_video(link, ismp4,dest, [], [])
+        download_video(link, ismp4, dest, cfg.edit_option, [], [])
     else:
         download_playlist(link, ismp4, dest, [], [])
     #update_history(newly_downloaded)
