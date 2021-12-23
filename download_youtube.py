@@ -5,44 +5,46 @@ from pytube import exceptions as pytube_exceptions
 from tqdm import tqdm
 import sys
 import os
+import argparse
 import yd_config as cfg
+
+# Parser setup
+parser = argparse.ArgumentParser()
+
+#-db DATABSE -u USERNAME -p PASSWORD -size 20
+parser.add_argument("url", help="URL")
+parser.add_argument("-f", "--format", default="mp3", help="Desired File Format")
+parser.add_argument("-d", "--destination", default=cfg.default_save_loc, help="Destination")
+
+args = parser.parse_args()
+
+print("Url: {} \n Format: {} \n Destination: {} ".format(
+            args.url,
+                    args.format,
+                                    args.destination
+                                            ))
+
+
+
 
 forbidden = cfg.forbidden # Load forbidden filename characters
 
-usage = "youtube_downloader link_to_vid_or_playlist [format (default=mp3, mp4)] [destination]\nBe use to wrap the link in quotes!"
-
-# Check No. Arguments
-if len(sys.argv) == 1: # no arguments passed
-    print(usage)
-    print("Pass the link to a youtube video to download the video to this folder.")
-    print("Otherwise, pass a playlist link to download the entire playlist.")
-    print("Downloading as mp3 requires ffmpeg.")
-    sys.exit()
-
-if len(sys.argv) > 4:
-    print(usage)
-    print("Too many args.")
-    sys.exit()
-
 # Name arguments
-link = str(sys.argv[1])
+link = args.url
 
-mp4 = False
-if len(sys.argv) >= 3:
-    format = str(sys.argv[2])
-    if format == "mp4":
-        mp4 = True
-        print("Requested format: mp4")
+if args.format in ["mp4", "MP4", "Mp4", "mP4"]: 
+    mp4 = True
+    print("Requested format: mp4")
+else
+    mp4 = args.format
 
-dest = cfg.default_save_loc
-if len(sys.argv) == 4:
-    dest = str(sys.argv[3])
-    print("\nDestination path: ", dest)
-    if not os.path.exists(dest):
-        os.mkdir(dest)
-        print("Created directory.")
-    else:
-        print("Directory already exists.")
+dest = args.destination
+print("\nDestination path: ", dest)
+if not os.path.exists(dest):
+    os.mkdir(dest)
+    print("Created directory.")
+else:
+    print("Directory already exists.")
 else:
     print("\nNo save location specified.")
     print("Saving to: " + dest)
@@ -59,18 +61,6 @@ given song in one playlist. I need to change this."""
 
 already_downloaded = []
 newly_downloaded = []
-# try:
-    # with open(cfg.history_file, 'r') as history:
-        # for line in history:
-            # already_downloaded.append(line[:-1]) # ignore newline
-# except (FileNotFoundError, IOError) as e:
-    # print(e)
-    # print("\nWARNING: history file not found or could not be accessed.")
-    # check = input("Continue? y/n    ")
-    # if check not in ["y", "n", "Y", "N", "yes", "no"]:
-        # check = str(input("Please enter y/n    "))
-    # if check not in ["y", "Y", "yes"]:
-        # sys.exit()
         
 def download_video(link, dest=None, edit_option=True):
     try:
@@ -198,10 +188,6 @@ def clean_up_extra_mp4s(dest):
 
 def update_history():
     print(newly_downloaded)
-    # print("\nUpdating history file.")
-    # with open(cfg.history_file, 'a') as history:
-        # for title in newly_downloaded:
-            # history.write(title + "\n")
 
 def end_message():
     if mp4:
