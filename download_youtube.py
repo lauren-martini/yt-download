@@ -28,7 +28,7 @@ if len(sys.argv) > 4:
 link = str(sys.argv[1])
 
 mp4 = False
-if len(sys.argv) == 3:
+if len(sys.argv) >= 3:
     format = str(sys.argv[2])
     if format == "mp4":
         mp4 = True
@@ -117,9 +117,10 @@ def download_video(link, dest=None, edit_option=True):
                 print("Download complete.")
                 
                 print("Converting to mp3...")
+                print("File size: " + str(stream.filesize/1000) + " kB") 
                 input_file = "%s.mp4"
                 input_format = "%s.3gpp"
-                os.system("ffmpeg -hide_banner -loglevel error -i \"%s\" \"%s.mp3\"" % (path, path))
+                os.system("ffmpeg -stats -hide_banner -loglevel error -i \"%s\" \"%s.mp3\"" % (path, path))
                 os.system("rm \"%s\"" % path)
                 print("Done! \n")
                 newly_downloaded.append(vid_title)
