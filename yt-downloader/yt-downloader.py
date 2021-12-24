@@ -6,7 +6,7 @@ from tqdm import tqdm
 import sys
 import os
 import argparse
-import yd_config as cfg
+import config as cfg
 
 def setup():
     # Parser setup
