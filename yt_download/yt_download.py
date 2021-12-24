@@ -25,8 +25,12 @@ def setup():
     if args.format in ["mp4", "MP4", "Mp4", "mP4"]: 
         ismp4 = True
         print("Requested format: mp4")
-    else:
+    elif args.format in ["mp3", "MP3", "Mp3", "mP3"]:
         ismp4 = False
+        print("Requested format: mp3")
+    else:
+        print("Unrecognized file format: ", args.format)
+        print("Please input mp3 (default) or mp4.")
 
     dest = args.destination
     if dest != cfg.default_save_loc:

@@ -9,6 +9,7 @@ setup(
         url="https://github.com/lauren-martini/yt-download",
         py_modules=['yt_download/yt_download', 'yt_download/config'], # module is yt_download.py
         author="lauren-martini",
+        author_email="lmartini@cs.washington.edu",
         install_requires=[
             'pytube==11.0.2',
             'tqdm',
