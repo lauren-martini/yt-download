@@ -2,6 +2,7 @@ from pytube import YouTube
 from pytube import Playlist
 from pytube import exceptions as pytube_exceptions
 from tqdm import tqdm
+from gooey import Gooey
 import sys
 import os
 import argparse
@@ -10,7 +11,7 @@ import yt_download.config as cfg
 
 def setup():
     # Parser setup
-    parser = argparse.ArgumentParser(epilog="")
+    parser = argparse.ArgumentParser(epilog="Run without arguments for the GUI, with arguments for CLI.")
 
     #-db DATABSE -u USERNAME -p PASSWORD -size 20
     parser.add_argument("url", help="URL for the video or playlist to be converted. Wrap in quotes if it contains special characters.")
@@ -214,6 +215,16 @@ def progress_function(stream, chunk, bytes_remaining):
     sys.stdout.flush()
 
 
+# Check if there are arguments - if not, use GUI
+if len(sys.argv) >= 2: # if there are any args
+    if not '--ignore-gooey' in sys.argv:
+        sys.argv.append("--ignore-gooey")
+        
+        
+@Gooey(
+    program_name="yt-download",
+    program_description="A simple pytube wrapper for simple youtube video downloads as mp3 and mp4.",
+    )
 def main():
     link, ismp4, dest, video = setup()
     
