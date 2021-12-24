@@ -19,4 +19,8 @@ setup(
                 'yt-download = yt_download.yt_download:main',
             ],
         },
+        data_files = [(
+            '/usr/local/etc', ['yt_download/config.py']
+            )
+        ],
 )
