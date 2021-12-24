@@ -19,8 +19,10 @@ setup(
                 'yt-download = yt_download.yt_download:main',
             ],
         },
-        data_files = [(
-            '/usr/local/etc', ['yt_download/config.py']
-            )
-        ],
+        include_package_data=True,
+        package_data={'yt_download': ['yt_download/config.py']},
+        #data_files = [(
+        #    '/usr/local/etc', ['yt_download/config.py']
+        #    )
+        #],
 )
