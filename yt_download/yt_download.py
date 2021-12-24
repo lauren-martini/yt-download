@@ -5,7 +5,7 @@ from tqdm import tqdm
 import sys
 import os
 import argparse
-import config as cfg
+import yt_download.config as cfg
 
 
 def setup():
@@ -165,7 +165,7 @@ def check_forbidden_char(string):
 
 def remove_forbidden_chars(string):
     for char in string:
-        if char in forbidden:
+        if char in cfg.forbidden:
             string = string.replace(char, "")
         if not isascii(char):
             string = string.replace(char, "")

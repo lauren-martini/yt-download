@@ -7,10 +7,10 @@ setup(
         license="MIT",
         description="A wrapper for pytube3 that makes it easier to download videos and playlists as mp3 or mp4.",
         url="https://github.com/lauren-martini/yt-download",
-        py_modules=['yt_download'], # module is yt_download.py
+        py_modules=['yt_download/yt_download', 'yt_download/config'], # module is yt_download.py
         author="lauren-martini",
         install_requires=[
-            'pytube3',
+            'pytube==11.0.2',
             'tqdm',
             'ffmpeg',
         ],
@@ -19,8 +19,8 @@ setup(
                 'yt-download = yt_download.yt_download:main',
             ],
         },
-        include_package_data=True,
-        package_data={'yt_download': ['yt_download/config.py']},
+        #include_package_data=True,
+        #package_data={'yt_download': ['yt_download/config.py']},
         #data_files = [(
         #    '/usr/local/etc', ['yt_download/config.py']
         #    )
