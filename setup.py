@@ -5,7 +5,8 @@ setup(
         version="0.1.1",
         packages=["yt_download"], # containing folder for yt_downloader.py
         license="MIT",
-        description="A wrapper for pytube3 that makes it easier to download videos and playlists as mp3 or mp4.",
+        long_description="A wrapper for pytube that makes it easier to download YouTube videos and playlists as mp3 or mp4.",
+        description="A wrapper for pytube that makes it easier to download YouTube videos and playlists as mp3 or mp4.",
         url="https://github.com/lauren-martini/yt-download",
         py_modules=['yt_download/yt_download', 'yt_download/config'], # module is yt_download.py
         author="lauren-martini",
