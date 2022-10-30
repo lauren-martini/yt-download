@@ -132,26 +132,36 @@ def download_video(link, ismp4, dest, edit_option=cfg.edit_option, already_downl
 def download_playlist(link, ismp4, dest, already_downloaded=[], newly_downloaded=[]):
     try:
         pl = Playlist(link)
-        #pl.populate_video_urls() # gen list of video links
         links = pl.video_urls
         print("\nDetected playlist: " + str(pl.title) + "\n")
-        
-        print("Would you like the option to edit the title of each video before it is downloaded? y/n")
-        print("Note that titles with forbidden characters will automatically have them removed if you select no.")
-        edit_all = str(input("\n"))
-        while edit_all not in ["y", "n", "Y", "N", "yes", "no"]:
-            print("Please enter y/n")
-            edit_all = str(input())
+
+	if args.save:
+	    # If in save mode, just save the titles to a text file and exit
+	    save_titles(links, writeloc="./" + str(pl.title) + ".txt")
+        else:
+            print("Would you like the option to edit the title of each video before it is downloaded? y/n")
+            print("Note that titles with forbidden characters will automatically have them removed if you select no.")
+            edit_all = str(input("\n"))
+            while edit_all not in ["y", "n", "Y", "N", "yes", "no"]:
+                print("Please enter y/n")
+                edit_all = str(input())
                 
-        edit_all = True if edit_all in ["y", "Y", "yes"] else False
-        for vid_link in tqdm(links):
-            download_video(vid_link, ismp4, dest, edit_all, already_downloaded, newly_downloaded)
+            edit_all = True if edit_all in ["y", "Y", "yes"] else False
+            for vid_link in tqdm(links):
+                download_video(vid_link, ismp4, dest, edit_all, already_downloaded, newly_downloaded)
         
-        if not ismp4:
-            clean_up_extra_mp4s(dest)
+            if not ismp4:
+                clean_up_extra_mp4s(dest)
             
     except pytube_exceptions.VideoUnavailable:
-        print("Video Unavailable. Maybe try a different source url. Proceeding to next.")
+        print("Video or playlist unavailable. Maybe try a different source url. Proceeding to next.")
+
+
+def save_titles(links, write_loc):
+    with open(write_loc, "a+") as f:
+        for vid_link in links:
+	    yt = YouTube
+            f.write(yt.title)
 
 
 def isascii(c):
