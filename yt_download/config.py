@@ -4,8 +4,8 @@ default_save_loc = "./tmp"
 
 # Characters not allowed to be in filenames, either due to Windows
 # or ffmpeg
-forbidden = ["\\", '/', ':', '\"', '*', '|', '<', '>', 
-              '~', '`', '\'', '!', "#", "@", "$", "^",
+forbidden = ["\\", '/', ':', '\"', '*', '|', '<', '>', "+",
+              '~', '`', '\'', '!', "?", "#", "@", "$", "^",
               ',', '(', ')', '&', '.'] 
               
 # History file - contains the names of videos that have already been 

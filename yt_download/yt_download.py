@@ -17,6 +17,7 @@ def setup():
     parser.add_argument("url", help="URL for the video or playlist to be converted. Wrap in quotes if it contains special characters.")
     parser.add_argument("-f", "--format", default="mp3", help="Desired File Format, either mp3 (default) or mp4")
     parser.add_argument("-d", "--destination", default=cfg.default_save_loc, help="Destination directory where the file is to be saved. The default save location may be changed in the config file.")
+    parser.add_argument("-s", "--save", action="store_true", help="Assumes a playlist link has been provided. The videos are not downloaded. The names of all the videos in the playlist are saved to a text file with the name of the playlist.")
 
     args = parser.parse_args()
 
@@ -56,7 +57,7 @@ def download_video(link, ismp4, dest, edit_option=cfg.edit_option, already_downl
         yt = YouTube(link, on_progress_callback=progress_function)
         vid_title = yt.title
         print("\nDetected video: ", vid_title)
-
+	
         if vid_title in already_downloaded:
             print("A video with this title has already been downloaded. See history file. Skipping.\n")
             return
@@ -90,6 +91,7 @@ def download_video(link, ismp4, dest, edit_option=cfg.edit_option, already_downl
         # Requested mp3 download:
         if not ismp4:
             if not os.path.exists(path + ".mp3"):
+                print("Path: " + str(path))
                 stream = yt.streams.filter(only_audio=True).first()
                 print("Stream info: " + str(stream))
                 
