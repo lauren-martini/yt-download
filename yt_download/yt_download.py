@@ -6,7 +6,7 @@ from gooey import Gooey
 import sys
 import os
 import argparse
-import yt_download.config as cfg
+from yt_download.config import edit_option, forbidden, default_save_loc
 
 
 def setup():
@@ -15,30 +15,33 @@ def setup():
 
     # -db DATABSE -u USERNAME -p PASSWORD -size 20
     parser.add_argument("url",
-                        help="URL for the video or playlist to be converted. Wrap in quotes if it contains special characters.")
+                        help="URL for the video or playlist to be converted. Wrap in quotes if it contains special "
+                             "characters.")
     parser.add_argument("-f", "--format", default="mp3", help="Desired File Format, either mp3 (default) or mp4")
-    parser.add_argument("-d", "--destination", default=cfg.default_save_loc,
-                        help="Destination directory where the file is to be saved. The default save location may be changed in the config file.")
+    parser.add_argument("-d", "--destination", default=default_save_loc,
+                        help="Destination directory where the file is to be saved. The default save location may be "
+                             "changed in the config file.")
     parser.add_argument("-s", "--save", action="store_true",
-                        help="Assumes a playlist link has been provided. The videos are not downloaded. The names of all the videos in the playlist are saved to a text file with the name of the playlist.")
+                        help="Assumes a playlist link has been provided. The videos are not downloaded. The names of "
+                             "all the videos in the playlist are saved to a text file with the name of the playlist.")
 
     args = parser.parse_args()
 
     # Name arguments
+    ismp4 = False
     link = args.url
 
     if args.format in ["mp4", "MP4", "Mp4", "mP4"]:
         ismp4 = True
         print("Requested format: mp4")
     elif args.format in ["mp3", "MP3", "Mp3", "mP3"]:
-        ismp4 = False
         print("Requested format: mp3")
     else:
         print("Unrecognized file format: ", args.format)
         print("Please input mp3 (default) or mp4.")
 
     dest = args.destination
-    if dest != cfg.default_save_loc:
+    if dest != default_save_loc:
         print("\nDestination path: ", dest)
         if not os.path.exists(dest):
             os.mkdir(dest)
@@ -57,7 +60,9 @@ def setup():
     return link, ismp4, dest, video, save
 
 
-def download_video(link, ismp4, dest, edit_option=cfg.edit_option, already_downloaded=[], newly_downloaded=[]):
+def download_video(link, ismp4, dest, edit_option=edit_option, already_downloaded=None, newly_downloaded=None):
+    if already_downloaded is None:
+        already_downloaded = []
     try:
         yt = YouTube(link, on_progress_callback=progress_function)
         vid_title = yt.title
@@ -134,7 +139,7 @@ def download_video(link, ismp4, dest, edit_option=cfg.edit_option, already_downl
         print("Video Unavailable. Maybe try a different url.")
 
 
-def download_playlist(link, ismp4, dest, save, already_downloaded=[], newly_downloaded=[]):
+def download_playlist(link, ismp4, dest, save, already_downloaded=None, newly_downloaded=None):
     try:
         pl = Playlist(link)
         links = pl.video_urls
@@ -150,7 +155,7 @@ def download_playlist(link, ismp4, dest, save, already_downloaded=[], newly_down
             while edit_all not in ["y", "n", "Y", "N", "yes", "no"]:
                 print("Please enter y/n")
                 edit_all = str(input())
-                
+
             edit_all = True if edit_all in ["y", "Y", "yes"] else False
             for vid_link in tqdm(links):
                 download_video(vid_link, ismp4, dest, edit_all, already_downloaded, newly_downloaded)
@@ -179,7 +184,7 @@ def isascii(c):
 
 def check_forbidden_char(string):
     culprits = []
-    for char in cfg.forbidden:
+    for char in forbidden:
         if char in string:
             culprits.append(char)
     if not isascii(string):
@@ -190,7 +195,7 @@ def check_forbidden_char(string):
 
 def remove_forbidden_chars(string):
     for char in string:
-        if char in cfg.forbidden:
+        if char in forbidden:
             string = string.replace(char, "")
         if not isascii(char):
             string = string.replace(char, "")
@@ -236,15 +241,15 @@ def progress_function(stream, chunk, bytes_remaining):
 
 
 # Check if there are arguments - if not, use GUI
-if len(sys.argv) >= 2:  # if there are any args
-    if not '--ignore-gooey' in sys.argv:
-        sys.argv.append("--ignore-gooey")
+# if len(sys.argv) >= 2:  # if there are any args
+#     if not '--ignore-gooey' in sys.argv:
+#         sys.argv.append("--ignore-gooey")
 
 
-@Gooey(
-    program_name="yt-download",
-    program_description="A simple pytube wrapper for simple youtube video downloads as mp3 and mp4.",
-)
+# @Gooey(
+#     program_name="yt-download",
+#     program_description="A simple pytube wrapper for simple youtube video downloads as mp3 and mp4.",
+# )
 def main():
     link, ismp4, dest, video, save = setup()
 
@@ -257,7 +262,7 @@ def main():
     newly_downloaded = []
 
     if video:
-        download_video(link, ismp4, dest, cfg.edit_option, [], [])
+        download_video(link, ismp4, dest, edit_option, [], [])
     else:
         download_playlist(link, ismp4, dest, save, [], [])
     # update_history(newly_downloaded)

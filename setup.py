@@ -15,7 +15,6 @@ setup(
             'pytube',
             'tqdm',
             'ffmpeg',
-            'gooey',
         ],
         entry_points={
             'console_scripts': [
