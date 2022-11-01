@@ -11,7 +11,8 @@ from yt_download.config import edit_option, forbidden, default_save_loc
 
 def setup():
     # Parser setup
-    parser = argparse.ArgumentParser(epilog="Run without arguments for the GUI, with arguments for CLI.")
+    parser = argparse.ArgumentParser(epilog="Run without arguments for the GUI (currently not implemented), "
+                                            "with arguments for CLI.")
 
     # -db DATABSE -u USERNAME -p PASSWORD -size 20
     parser.add_argument("url",
@@ -169,12 +170,20 @@ def download_playlist(link, ismp4, dest, save, already_downloaded=None, newly_do
 
 def save_titles(links, write_loc):
     with open(write_loc, "a+") as f:
+        print("Opened file: " + write_loc)
         for link in links:
-            yt = YouTube(link, on_progress_callback=progress_function)
-            for line in f:
-                if yt.title in line:
-                    break
-                f.write(yt.title)
+            try:
+                yt = YouTube(link, on_progress_callback=progress_function)
+                print("Found video: " + yt.title)
+                for line in f:
+                    if yt.title in line:
+                        print("Video already in file. Skipping.")
+                        break
+                else:
+                    f.write(yt.title + "\n")
+                    print("Wrote: " + yt.title)
+            except pytube_exceptions.VideoUnavailable or EOFError:
+                print("Video Unavailable. Maybe try a different url.")
 
 
 def isascii(c):
