@@ -12,7 +12,7 @@ setup(
         author="lauren-martini",
         author_email="lmartini@cs.washington.edu",
         install_requires=[
-            'pytube==11.0.2',
+            'pytube',
             'tqdm',
             'ffmpeg',
             'gooey',
