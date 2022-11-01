@@ -2,7 +2,7 @@ from pytube import YouTube
 from pytube import Playlist
 from pytube import exceptions as pytube_exceptions
 from tqdm import tqdm
-from gooey import Gooey
+#from gooey import Gooey
 import sys
 import os
 import argparse
